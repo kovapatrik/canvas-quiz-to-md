@@ -5,5 +5,6 @@ A quiz-en elért pontszám alatt meg fog jelenni egy gomb, amivel le tudod mente
 
 A feladaton belül rá kell kattintanod a próbálkozásra is, csak azon az oldalt fog megjelenni a gomb. (url-ben: "history?=...)
 
-**Egyelőre csak a checkboxos és radio button-ös válaszokra működik.**
-
+**Működő quiz típusok:** 
+- radio button, checkbox: [radio_checkbox](https://i.imgur.com/18Tf2pl.png)
+- listából választós: [lista](https://i.imgur.com/GMoynlB.png)
