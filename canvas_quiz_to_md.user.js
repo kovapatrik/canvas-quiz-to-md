@@ -37,16 +37,26 @@
 
         for (let i = 0; i < blocks.length; i++) {
             let curr_q = blocks[i].getElementsByClassName('text')[0];
-            string_to_save += "## " + curr_q.getElementsByClassName('question_text')[0].innerText + "  \n\n";
-            let answers = curr_q.querySelectorAll('.answers_wrapper .answer .select_answer');
+            string_to_save += "## " + curr_q.getElementsByClassName('question_text')[0].innerText + "\n\n";
+            let answers = curr_q.querySelectorAll('.answers_wrapper .answer');
             for (let j = 0; j < answers.length; j++) {
-                let checked = answers[j].children[0].checked;
-                if (checked) {
-                    string_to_save += "- [x] ";
-                } else {
-                    string_to_save += "- [ ] ";
+                let node = answer[j].querySelectorAll(':scope > div:not([style*="display:none"]):not([style*="display: none"])')[0];
+                let type = node.className;
+                
+                if (type.includes('answer_match')) { // listából választós - left middle right
+                    let left = node.getElementsByClassName('answer_match_left')[0].innerText;
+                    let middle = node.getElementsByClassName('answer_match_middle')[0].innerText;
+                    let right = node.getElementsByClassName('answer_match_right')[0].innerText;
+                    string_to_save += "- " + left + " " + middle + " " + right + "\n";
+                } else if (type.includes('select_answer')) { // radio button vagy checkbox
+                    let checked = node.children[0].checked;
+                    if (checked) {
+                        string_to_save += "- [x] ";
+                    } else {
+                        string_to_save += "- [ ] ";
+                    }
+                    string_to_save += node.children[1].innerText + "\n";
                 }
-                string_to_save += answers[j].children[1].innerText + "  \n";
             }
             string_to_save += "\n\n";
         }
