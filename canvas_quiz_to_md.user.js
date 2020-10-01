@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Canvas Quiz to Markdown
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @author       kiráj___arc
 // @match        https://canvas.elte.hu/*/submissions/*
 // @match        https://canvas.elte.hu/*/quizzes/*/history*
@@ -31,6 +31,10 @@
         referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
     }
 
+    function isBlank(str) {
+        return (!str || /^\s*$/.test(str));
+    }
+
     function save() {
 
         let string_to_save = "";
@@ -46,6 +50,9 @@
                 if (type.includes('answer_match')) { // listából választós - left middle right
                     let left = node.getElementsByClassName('answer_match_left')[0].innerText;
                     let middle = node.getElementsByClassName('answer_match_middle')[0].innerText;
+                    if (isBlank(middle)) {
+                        middle = '-';
+                    }
                     let right = node.getElementsByClassName('answer_match_right')[0].innerText;
                     string_to_save += "- " + left + " " + middle + " " + right + "\n";
                 } else if (type.includes('select_answer')) { // radio button vagy checkbox
