@@ -18,7 +18,7 @@
     let re = new RegExp("([\\" + escape_chars.join('\\') + "])", "g")
     let blocks= document.getElementsByClassName('question');
     let correct_answers = document.getElementsByClassName('correct_answer');
-    
+
     if (blocks.length > 0) {
         
         let button = createButton('Saját válaszok mentése Markdown-ba', 'user-save-to-md');
@@ -77,13 +77,13 @@
                     } else {
                         string_to_save += "- [ ] ";
                     }
-                    string_to_save += node.children[1].innerText.replaceAll(re, "\\$1") + "\n";
+                    string_to_save += node.children[1].innerText + "\n";
                 }
             }
             string_to_save += "\n\n";
         }
 
-        var blob = new Blob([string_to_save], {type: "text/plain;charset=utf-8"});
+        var blob = new Blob([string_to_save.replaceAll(re, "\\$1")], {type: "text/plain;charset=utf-8"});
         saveAs(blob, "quiz.md");
 
         return false;
