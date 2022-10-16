@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Canvas Quiz to Markdown
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @author       kovapatrik
 // @match        https://canvas.elte.hu/*/submissions/*
 // @match        https://canvas.elte.hu/*/quizzes/*/history*
