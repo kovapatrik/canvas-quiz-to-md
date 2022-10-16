@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Canvas Quiz to Markdown
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @author       kovapatrik
 // @match        https://canvas.elte.hu/*/submissions/*
 // @match        https://canvas.elte.hu/*/quizzes/*/history*
@@ -13,9 +13,12 @@
 (function() {
     'use strict';
 
+    
+    let escape_chars = ["\\", "\`", "\*", "\_", "\{", "\}", "\[", "\]", "\(", "\)", "\#", "\+", "\-", "\.", "\!"]
+    let re = new RegExp("([\\" + escape_chars.join('\\') + "])", "g")
     let blocks= document.getElementsByClassName('question');
     let correct_answers = document.getElementsByClassName('correct_answer');
-
+    
     if (blocks.length > 0) {
         
         let button = createButton('Saját válaszok mentése Markdown-ba', 'user-save-to-md');
@@ -74,7 +77,7 @@
                     } else {
                         string_to_save += "- [ ] ";
                     }
-                    string_to_save += node.children[1].innerText + "\n";
+                    string_to_save += node.children[1].innerText.replaceAll(re, "\\$1") + "\n";
                 }
             }
             string_to_save += "\n\n";
