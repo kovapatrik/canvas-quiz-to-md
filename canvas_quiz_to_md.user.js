@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Canvas Quiz to Markdown
 // @namespace    http://tampermonkey.net/
-// @version      0.2
-// @author       kiráj___arc
+// @version      1.0
+// @author       kovapatrik
 // @match        https://canvas.elte.hu/*/submissions/*
 // @match        https://canvas.elte.hu/*/quizzes/*/history*
 // @require      https://raw.githubusercontent.com/eligrey/FileSaver.js/master/dist/FileSaver.js
@@ -14,17 +14,29 @@
     'use strict';
 
     let blocks= document.getElementsByClassName('question');
+    let correct_answers = document.getElementsByClassName('correct_answer');
 
     if (blocks.length > 0) {
-        console.log("helo");
+        
+        let button = createButton('Saját válaszok mentése Markdown-ba', 'user-save-to-md');
+        button.addEventListener("click", () => save(false), false);
+        let before = document.getElementsByClassName('quiz_score')[0];
+        insertAfter(button, before);
+
+        if (correct_answers.length > 0) {
+            let correct_button = createButton('Helyes válaszok mentése Markdown-ba', 'correct-save-to-md');
+            correct_button.addEventListener("click",() => save(true), false);
+            insertAfter(correct_button, button);
+        }
+    }
+
+    function createButton(text, id) {
         let button = document.createElement('button');
         button.className = 'btn btn-primary';
         button.type = "button";
-        button.textContent = "Mentés Markdown-ba";
-        button.id = "save-to-md";
-        button.addEventListener ("click", save , false);
-        let before = document.getElementsByClassName('quiz_score')[0];
-        insertAfter(button, before);
+        button.textContent = text;
+        button.id = id;
+        return button
     }
 
     function insertAfter(newNode, referenceNode) {
@@ -35,8 +47,7 @@
         return (!str || /^\s*$/.test(str));
     }
 
-    function save() {
-
+    function save(is_correct) {
         let string_to_save = "";
 
         for (let i = 0; i < blocks.length; i++) {
@@ -44,6 +55,7 @@
             string_to_save += "## " + curr_q.getElementsByClassName('question_text')[0].innerText + "\n\n";
             let answers = curr_q.querySelectorAll('.answers_wrapper .answer');
             for (let j = 0; j < answers.length; j++) {
+                let correct_answer = answers[j].classList.contains('correct_answer')
                 let node = answers[j].querySelectorAll(':scope > div:not([style*="display:none"]):not([style*="display: none"])')[0];
                 let type = node.className;
                 
@@ -56,7 +68,7 @@
                     let right = node.getElementsByClassName('answer_match_right')[0].innerText;
                     string_to_save += "- " + left + " " + middle + " " + right + "\n";
                 } else if (type.includes('select_answer')) { // radio button vagy checkbox
-                    let checked = node.children[0].checked;
+                    let checked = is_correct ? correct_answer : node.children[0].checked;
                     if (checked) {
                         string_to_save += "- [x] ";
                     } else {
