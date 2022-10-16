@@ -6,8 +6,8 @@
 // @match        https://canvas.elte.hu/*/submissions/*
 // @match        https://canvas.elte.hu/*/quizzes/*/history*
 // @require      https://raw.githubusercontent.com/eligrey/FileSaver.js/master/dist/FileSaver.js
-// @downloadURL  https://github.com/kovapatrik/canvas-quiz-to-md/raw/master/canvas_quiz_to_md.user.js
 // @grant        none
+// @description  Convert Canvas quizes to Markdown format
 // ==/UserScript==
 
 (function() {
